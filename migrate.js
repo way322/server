@@ -6,7 +6,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-const sql = readFileSync('./server/init.sql').toString();
+const sql = readFileSync('./init.sql').toString();
 
 async function runMigrations() {
   try {

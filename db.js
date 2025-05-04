@@ -15,9 +15,9 @@ console.log('Database config:', config); // Добавляем логирова�
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false // Важно для подключения через SSL
   }
-});
+})
 
 // Проверка подключения
 pool.query('SELECT NOW()')
