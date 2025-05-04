@@ -1,3 +1,4 @@
+// server/migrate.js
 import { readFileSync } from 'fs';
 import { Pool } from 'pg';
 

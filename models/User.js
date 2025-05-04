@@ -1,4 +1,4 @@
-// models/User.js
+// server/models/User.js
 
 import pool from '../db.js';
 

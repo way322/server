@@ -1,4 +1,4 @@
---
+-- server/init.sql
 -- PostgreSQL database dump
 --
 
