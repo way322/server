@@ -12,7 +12,12 @@ const config = {
 
 console.log('Database config:', config); // Добавляем логирование конфига
 
-const pool = new Pool(config);
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 // Проверка подключения
 pool.query('SELECT NOW()')
