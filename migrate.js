@@ -2,23 +2,22 @@
 import { readFileSync } from 'fs';
 import { Pool } from 'pg';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+const runMigrations = async () => {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
 
-const sql = readFileSync('./init.sql').toString();
-
-async function runMigrations() {
   try {
+    const sql = readFileSync('./schema.sql').toString();
     await pool.query(sql);
-    console.log('✅ База данных создана!');
+    console.log('✅ Schema applied successfully!');
   } catch (err) {
-    console.error('❌ Ошибка:', err);
+    console.error('❌ Migration failed:', err);
     process.exit(1);
   } finally {
     await pool.end();
   }
-}
+};
 
 runMigrations();
