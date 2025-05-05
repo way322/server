@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "migrate": "node --experimental-vm-modules migrate.js",
+    "migrate": "psql $DATABASE_URL -f schema.sql",
     "start": "node server.js",
     "deploy": "npm run migrate && npm start"
   },
