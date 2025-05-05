@@ -7,11 +7,17 @@ import productsRouter from './routes/products.js';
 import favoritesRouter from './routes/favorites.js';
 import cartRouter from './routes/cart.js';
 import orderRouter from './routes/order.js';
-
+import { exec } from 'child_process';
 
 dotenv.config();
 
-
+exec('npm run migrate', (error, stdout, stderr) => {
+  if (error) {
+    console.error('Migration error:', error);
+    process.exit(1);
+  }
+  console.log('Migrations output:', stdout);
+});
 
 const app = express();
 
