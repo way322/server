@@ -1,34 +1,38 @@
 // server/migrate.js
+import pg from 'pg';
+const { Client } = pg; // Используем Client вместо Pool для миграций
 import { readFileSync } from 'fs';
-import { Pool } from 'pg';
 
 const runMigrations = async () => {
-  const pool = new Pool({
+  const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { 
-      rejectUnauthorized: false,
-      require: true
+      rejectUnauthorized: false // Без require: true (Railway сам управляет SSL)
     }
   });
 
   try {
-    console.log('Starting migrations...');
+    await client.connect();
+    console.log('🚀 Starting migrations...');
+    
     const sql = readFileSync('./schema.sql').toString();
     
-    // Разделяем запросы по точкам с запятой
-    const queries = sql.split(';').filter(q => q.trim());
+    // Улучшенный сплит с учетом PL/pgSQL блоков
+    const queries = sql.split(/;\s*?(?=CREATE|INSERT|ALTER|DROP|SELECT|DELETE|UPDATE)/i);
     
     for (const query of queries) {
-      await pool.query(query);
-      console.log(`✅ Executed query: ${query.slice(0, 50)}...`);
+      if (query.trim()) {
+        await client.query(query);
+        console.log(`✅ Executed query: ${query.split(/\s+/).slice(0, 4).join(' ')}...`);
+      }
     }
     
-    console.log('✅ All migrations completed successfully!');
+    console.log('🎉 All migrations completed successfully!');
   } catch (err) {
-    console.error('❌ Migration failed:', err);
+    console.error('❌ Migration failed:', err.message);
     process.exit(1);
   } finally {
-    await pool.end();
+    await client.end(); // Всегда закрываем соединение
   }
 };
 
