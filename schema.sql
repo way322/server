@@ -63,11 +63,5 @@ INSERT INTO Products (id, title, price, image_url) VALUES
 
 
 
--- Изменение типа столбца total в таблице Orders
-ALTER TABLE Orders 
-ALTER COLUMN total TYPE DECIMAL(10,2) USING total::DECIMAL(10,2);
 
--- Добавление недостающих индексов
-CREATE INDEX idx_orders_user ON Orders(user_id);
-CREATE INDEX idx_order_items_order ON Order_items(order_id);
 
