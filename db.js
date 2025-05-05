@@ -11,7 +11,12 @@ const config = {
 };
 
 console.log('Database config:', config); // Добавляем логирование конфига
-
+console.log('Database config:', {
+  host: pool.options.host,
+  port: pool.options.port,
+  database: pool.options.database,
+  user: pool.options.user
+});
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
